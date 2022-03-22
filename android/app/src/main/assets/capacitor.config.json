@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "ocr-app1",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
