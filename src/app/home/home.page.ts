@@ -5,6 +5,7 @@ import {
   CameraSource,
   ImageOptions,
 } from '@capacitor/camera';
+import { AlertController } from '@ionic/angular';
 import { PhotoService } from '../services/photo.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { PhotoService } from '../services/photo.service';
 })
 export class HomePage implements OnInit {
   base64 = '';
-  constructor(public photoService: PhotoService) {}
+  constructor(public photoService: PhotoService, private alertController: AlertController) {}
 
   ngOnInit() {
     Camera.requestPermissions({ permissions: ['photos'] });
