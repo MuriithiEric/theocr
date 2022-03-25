@@ -5,6 +5,7 @@ import {
   CameraSource,
   ImageOptions,
 } from '@capacitor/camera';
+import { PhotoService } from '../services/photo.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ import {
 })
 export class HomePage implements OnInit {
   base64 = '';
-  constructor() {}
+  constructor(public photoService: PhotoService) {}
 
   ngOnInit() {
     Camera.requestPermissions({ permissions: ['photos'] });
@@ -32,5 +33,9 @@ export class HomePage implements OnInit {
         alert(err);
       }
     );
+  }
+
+  addPhotoToGallery() {
+    this.photoService.addNewToGallery();
   }
 }
