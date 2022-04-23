@@ -347,7 +347,7 @@ ion-list {
   border: none;
   outline: none;
   padding: 20px;
-  width: 100%;
+  width: 50%;
   border-radius: 8px;
   font-size: 1em;
   font-weight: bold;
@@ -400,5 +400,10 @@ ion-card {
   ion-img {
     width: 200px;
     margin: 0 auto;
+  }
+}
+page-home {
+  .ng-progress-bar {
+    margin-top: 88px;
   }
 }

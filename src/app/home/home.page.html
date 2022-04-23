@@ -18,16 +18,17 @@
 </ion-header>
 
 <ion-content>
+  <ng-progress [min]="0" [max]="1"></ng-progress>
   <div class="user-info">
     <div class="client-name-display">
       <div class="item-img">
-        <img src="assets/imgs/user.png" alt="" />
+        <img src="assets/approved.png" alt="" />
       </div>
       <div class="item-information">
         <h4>
-          Peter K <span><img src="assets/imgs/approved.png" alt="" /></span>
+          Eric M <span><img src="assets/imgs/approved.png" alt="" /></span>
         </h4>
-        <p>SGA Group | Industrial Area</p>
+        <p>MDX Dubai | Dubai</p>
       </div>
     </div>
 
@@ -35,7 +36,7 @@
       <ul>
         <li>
           <h5>34</h5>
-          <p>Times Fueled /m</p>
+          <p>Scanned Docs /m</p>
         </li>
         <li>
           <h5>{{'3234' | number:'.1'}} KES</h5>
@@ -52,13 +53,16 @@
       </ul>
     </div>
 
-    <p>
-      Hi Peter, you've fueled 34 times, and have travelled 2139km this month.
-    </p>
+    <p>Hi Eric, welcome to the ocr-app, please go ahead to upload an image.</p>
 
-    <button (click)="addPhotoToGallery();" id="receipt-btn">
-      Add Receipt</button
-    ><img [src]="base64" />
+    <button (click)="selectSource()" id="receipt-btn">Select Image</button>
+    <button
+      (click)="recognizeImage()"
+      [disabled]="!selectedImage"
+      id="receipt-btn"
+    >
+      Recognize
+    </button>
   </div>
 
   <div class="tab-wrapper">
@@ -71,7 +75,7 @@
       <ion-list *ngSwitchCase="'receipts'">
         <div class="card-wrapper">
           <!---- Item List ---->
-          <div *ngFor="let receipt of [1,2,3,4,5]" class="item_list">
+          <div *ngFor="let receipt of [1,2]" class="item_list">
             <!--<div *ngFor="let receipt of [1,2,3,4,5]" class="item_list">-->
             <ion-card>
               <ion-card-header>
