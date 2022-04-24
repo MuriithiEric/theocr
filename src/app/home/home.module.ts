@@ -4,21 +4,20 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
-import { Camera, CameraResultType, CameraSource, ImageOptions } from "@capacitor/camera";
+import { NgProgressModule } from 'ngx-progressbar';
+
+//import { Camera, CameraResultType, CameraSource, ImageOptions } from "@capacitor/camera";
 
 import { HomePageRoutingModule } from './home-routing.module';
-
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    NgProgressModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
-export class HomePageModule {
-  
-
-}
+export class HomePageModule {}

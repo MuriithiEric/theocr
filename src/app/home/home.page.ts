@@ -1,104 +1,99 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  Camera,
-  CameraResultType,
-  CameraSource,
-  ImageOptions,
-} from '@capacitor/camera';
-import { Plugins } from '@capacitor/core';
-import { AlertController } from '@ionic/angular';
-import { PhotoService } from '../services/photo.service';
+import { Component } from '@angular/core';
+//import { CameraPlugin, PictureSourceType } from '@capacitor/camera';
+import { ActionSheetController, NavController } from '@ionic/angular';
+import { NgProgress } from 'ngx-progressbar';
+import { NgProgressHttpModule } from 'ngx-progressbar/http';
+import { NgProgressRouterModule } from 'ngx-progressbar/router';
+//import * as Tesseract from 'tesseract.js';
+import { createWorker } from 'tesseract.js';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
-  base64 = '';
-  utils: any;
-  imageUrl: any;
+export class HomePage {
+  selectedImage: string;
+  imageText: string;
+  ocrResult = 'Recognizing...';
+
   constructor(
-    public photoService: PhotoService,
-    private alertController: AlertController
-  ) {}
-
-  ngOnInit() {
-    //Camera.requestPermissions({ permissions: ['photos'] });
+    public navCtrl: NavController,
+    private actionSheetCtrl: ActionSheetController,
+    //private camera: CameraPlugin,
+    public progress: NgProgress,
+    public ngphMod: NgProgressHttpModule,
+    public ngprMod: NgProgressRouterModule
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this.doOCR;
   }
 
-  //Code to pick an image from gallery
-
-  pickImageFromGallery() {
-    const options: ImageOptions = {
-      source: CameraSource.Photos,
-      resultType: CameraResultType.DataUrl,
-    };
-    Camera.getPhoto(options).then(
-      (result) => {
-        this.base64 = result.dataUrl;
-      },
-      (err) => {
-        alert(err);
-      }
-    );
-  }
-
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
-  }
-
-  onUploadSuccess(url) {
-    // console.log('###uploadSuccess', res);
-    const imageUrl = url;
-    console.log(imageUrl);
-  }
-
-  onUploadError(err: any) {
-    // console.log('###uploadError', err);
-    this.utils.handleError(err);
-  }
-
-  async presentAlertRadio() {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Select Option',
-      inputs: [
-        {
-          name: 'radio1',
-          type: 'radio',
-          label: 'Take Picture',
-          value: 'camera',
-          checked: true,
-        },
-        {
-          name: 'radio2',
-          type: 'radio',
-          label: 'Upload from Device',
-          value: 'filestack',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          },
-        },
-        {
-          text: 'Ok',
-          handler: (choice) => {
-            if (choice === 'camera') {
-              this.addPhotoToGallery();
-            }
-            console.log('Confirm Ok');
-          },
-        },
-      ],
+  async doOCR() {
+    const worker = createWorker({
+      logger: m => console.log(m),
     });
-
-    await alert.present();
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    const { data: { text } } = await worker.recognize('https://tesseract.projectnaptha.com/img/eng_bw.png');
+    this.ocrResult = text;
+    console.log(text);
+    await worker.terminate();
   }
+
+  // async selectSource() {
+  //   const actionSheet = await this.actionSheetCtrl.create({
+  //     buttons: [
+  //       {
+  //         text: 'Use Library',
+  //         handler: () => {
+  //           this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+  //         },
+  //       },
+  //       {
+  //         text: 'Capture Image',
+  //         handler: () => {
+  //           this.getPicture(this.camera.PictureSourceType.CAMERA);
+  //         },
+  //       },
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //       },
+  //     ],
+  //   });
+  //   actionSheet.present();
+  // }
+
+  // getPicture(sourceType: PictureSourceType) {
+  //   this.camera
+  //     .getPicture({
+  //       quality: 100,
+  //       destinationType: this.camera.DestinationType.DATA_URL,
+  //       sourceType,
+  //       allowEdit: true,
+  //       saveToPhotoAlbum: false,
+  //       correctOrientation: true,
+  //     })
+  //     .then((imageData) => {
+  //       this.selectedImage = `data:image/jpeg;base64,${imageData}`;
+  //     });
+  // }
+
+  // recognizeImage() {
+  //   Tesseract.recognize(this.selectedImage)
+  //     .progress((message) => {
+  //       if (message.status === 'recognizing text') {
+  //         this.progress.set(message.progress);
+  //       }
+  //     })
+  //     .catch((err) => console.error(err))
+  //     .then((result) => {
+  //       this.imageText = result.text;
+  //     })
+  //     .finally((resultOrError) => {
+  //       this.progress.complete();
+  //     });
+  // }
 }
