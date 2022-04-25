@@ -6,6 +6,7 @@ import { NgProgressHttpModule } from 'ngx-progressbar/http';
 import { NgProgressRouterModule } from 'ngx-progressbar/router';
 //import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { createWorker } from 'tesseract.js';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  picture: string;
   selectedImage: string;
   imageText: string;
   ocrResult = 'Recognizing...';
@@ -30,6 +32,11 @@ export class HomePage {
   }
 
   async doOCR() {
+    console.log('Running OCR function');
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const files = (<HTMLInputElement>document.getElementById('myfile'))
+      .files[0];
+    console.log(files);
     const worker = createWorker({
       logger: (m) => console.log(m),
     });
@@ -38,12 +45,20 @@ export class HomePage {
     await worker.initialize('eng');
     const {
       data: { text },
-    } = await worker.recognize(
-      'https://i.stack.imgur.com/0Jl54.png'
-    );
+    } = await worker.recognize('./src/assets/text.png');
     this.ocrResult = text;
     console.log(text);
     await worker.terminate();
+  }
+
+  async takePicture() {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+    });
+
+    this.picture = image.dataUrl;
   }
 
   // async selectSource() {

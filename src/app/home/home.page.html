@@ -92,6 +92,12 @@
               </ion-card-header>
               <ion-card-content>
                 <!--<ion-img [src]="selectedImage" *ngIf="selectedImage"></ion-img>-->
+
+                <form action="http://localhost:3000/" id="form" method="post">
+                  <input type="file" id="myfile" />
+                  <button type="submit">Upload Image</button>
+                </form>
+
                 <ion-img
                   src="https://i.stack.imgur.com/0Jl54.png"
                   width="50%"

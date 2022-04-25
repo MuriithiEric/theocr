@@ -12,7 +12,6 @@ import { NgProgressRouterModule } from 'ngx-progressbar/router';
 
 // import { AngularFireModule } from '@angular/fire';
 // import { AngularFireAuthModule } from '@angular/fire/auth';
-//import { firebaseConfig } from './credentials';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,9 +24,6 @@ import { NgProgressRouterModule } from 'ngx-progressbar/router';
     NgProgressRouterModule,
 
     AppRoutingModule,
-    //AngularFireModule.initializeApp(firebaseConfig),
-    // AngularFireAuthModule,
-
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
